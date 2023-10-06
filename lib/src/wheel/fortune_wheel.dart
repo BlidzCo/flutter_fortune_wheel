@@ -2,8 +2,7 @@ part of 'wheel.dart';
 
 enum HapticImpact { none, light, medium, heavy }
 
-Offset _calculateWheelOffset(
-    BoxConstraints constraints, TextDirection textDirection) {
+Offset _calculateWheelOffset(BoxConstraints constraints, TextDirection textDirection) {
   final smallerSide = getSmallerSide(constraints);
   var offsetX = constraints.maxWidth / 2;
   if (textDirection == TextDirection.rtl) {
@@ -150,6 +149,8 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
   /// a section border is crossed.
   final ValueChanged<int>? onFocusItemChanged;
 
+  final Widget? centerWidget;
+
   double _getAngle(double progress) {
     return 2 * _math.pi * rotationCount * progress;
   }
@@ -180,6 +181,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
     PanPhysics? physics,
     this.onFling,
     this.onFocusItemChanged,
+    this.centerWidget,
   })  : physics = physics ?? CircularPanPhysics(),
         assert(items.length > 1),
         super(key: key);
@@ -236,12 +238,9 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                     textDirection: Directionality.of(context),
                   );
 
-                  final isAnimatingPanFactor =
-                      rotateAnimCtrl.isAnimating ? 0 : 1;
-                  final selectedAngle =
-                      -2 * _math.pi * (selectedIndex.value / items.length);
-                  final panAngle =
-                      panState.distance * panFactor * isAnimatingPanFactor;
+                  final isAnimatingPanFactor = rotateAnimCtrl.isAnimating ? 0 : 1;
+                  final selectedAngle = -2 * _math.pi * (selectedIndex.value / items.length);
+                  final panAngle = panState.distance * panFactor * isAnimatingPanFactor;
                   final rotationAngle = _getAngle(rotateAnim.value);
                   final alignmentOffset = _calculateAlignmentOffset(alignment);
                   final totalAngle = selectedAngle + panAngle + rotationAngle;
@@ -260,9 +259,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                     for (var i = 0; i < items.length; i++)
                       TransformedFortuneItem(
                         item: items[i],
-                        angle: totalAngle +
-                            alignmentOffset +
-                            _calculateSliceAngle(i, items.length),
+                        angle: totalAngle + alignmentOffset + _calculateSliceAngle(i, items.length),
                         offset: wheelData.offset,
                       ),
                   ];
@@ -277,6 +274,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                 });
               },
             ),
+            if (centerWidget != null) centerWidget!,
             for (var it in indicators)
               IgnorePointer(
                 child: _WheelIndicator(indicator: it),

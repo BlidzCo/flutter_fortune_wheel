@@ -64,7 +64,7 @@ class _WheelIndicator extends StatelessWidget {
         final angle = _getAngle(indicator.alignment);
 
         return Align(
-          alignment: indicator.alignment,
+          alignment: indicator.customAlignment ?? indicator.alignment,
           child: Transform.translate(
             offset: offset,
             child: Transform.rotate(
