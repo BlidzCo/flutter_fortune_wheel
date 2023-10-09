@@ -151,6 +151,8 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
 
   final Widget? centerWidget;
 
+  final List<Shadow>? innerShadows;
+
   double _getAngle(double progress) {
     return 2 * _math.pi * rotationCount * progress;
   }
@@ -182,6 +184,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
     this.onFling,
     this.onFocusItemChanged,
     this.centerWidget,
+    this.innerShadows,
   })  : physics = physics ?? CircularPanPhysics(),
         assert(items.length > 1),
         super(key: key);
@@ -231,47 +234,62 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                 final meanSize = (size.width + size.height) / 2;
                 final panFactor = 6 / meanSize;
 
-                return LayoutBuilder(builder: (context, constraints) {
-                  final wheelData = _WheelData(
-                    constraints: constraints,
-                    itemCount: items.length,
-                    textDirection: Directionality.of(context),
-                  );
+                return LayoutBuilder(
+                  builder: (context, constraints) {
+                    final wheelData = _WheelData(
+                      constraints: constraints,
+                      itemCount: items.length,
+                      textDirection: Directionality.of(context),
+                    );
 
-                  final isAnimatingPanFactor = rotateAnimCtrl.isAnimating ? 0 : 1;
-                  final selectedAngle = -2 * _math.pi * (selectedIndex.value / items.length);
-                  final panAngle = panState.distance * panFactor * isAnimatingPanFactor;
-                  final rotationAngle = _getAngle(rotateAnim.value);
-                  final alignmentOffset = _calculateAlignmentOffset(alignment);
-                  final totalAngle = selectedAngle + panAngle + rotationAngle;
+                    final isAnimatingPanFactor = rotateAnimCtrl.isAnimating ? 0 : 1;
+                    final selectedAngle = -2 * _math.pi * (selectedIndex.value / items.length);
+                    final panAngle = panState.distance * panFactor * isAnimatingPanFactor;
+                    final rotationAngle = _getAngle(rotateAnim.value);
+                    final alignmentOffset = _calculateAlignmentOffset(alignment);
+                    final totalAngle = selectedAngle + panAngle + rotationAngle;
 
-                  final focusedIndex = _vibrateIfBorderCrossed(
-                    totalAngle,
-                    lastVibratedAngle,
-                    items.length,
-                    hapticImpact,
-                  );
-                  if (focusedIndex != null) {
-                    onFocusItemChanged?.call(focusedIndex % items.length);
-                  }
+                    final focusedIndex = _vibrateIfBorderCrossed(
+                      totalAngle,
+                      lastVibratedAngle,
+                      items.length,
+                      hapticImpact,
+                    );
+                    if (focusedIndex != null) {
+                      onFocusItemChanged?.call(focusedIndex % items.length);
+                    }
 
-                  final transformedItems = [
-                    for (var i = 0; i < items.length; i++)
-                      TransformedFortuneItem(
-                        item: items[i],
-                        angle: totalAngle + alignmentOffset + _calculateSliceAngle(i, items.length),
-                        offset: wheelData.offset,
+                    final transformedItems = [
+                      for (var i = 0; i < items.length; i++)
+                        TransformedFortuneItem(
+                          item: items[i],
+                          angle: totalAngle + alignmentOffset + _calculateSliceAngle(i, items.length),
+                          offset: wheelData.offset,
+                        ),
+                    ];
+
+                    if (innerShadows?.isNotEmpty ?? false) {
+                      return SizedBox.expand(
+                        child: InnerShadow(
+                          shadows: innerShadows!,
+                          child: _CircleSlices(
+                            items: transformedItems,
+                            wheelData: wheelData,
+                            styleStrategy: styleStrategy,
+                          ),
+                        ),
+                      );
+                    }
+
+                    return SizedBox.expand(
+                      child: _CircleSlices(
+                        items: transformedItems,
+                        wheelData: wheelData,
+                        styleStrategy: styleStrategy,
                       ),
-                  ];
-
-                  return SizedBox.expand(
-                    child: _CircleSlices(
-                      items: transformedItems,
-                      wheelData: wheelData,
-                      styleStrategy: styleStrategy,
-                    ),
-                  );
-                });
+                    );
+                  },
+                );
               },
             ),
             if (centerWidget != null) centerWidget!,
