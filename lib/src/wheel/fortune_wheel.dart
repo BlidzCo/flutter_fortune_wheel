@@ -268,12 +268,40 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                         ),
                     ];
 
+                    final decorationItems = [
+                      for (var i = 0; i < items.length; i++)
+                        TransformedFortuneItem(
+                          item: items[i],
+                          angle: selectedAngle +
+                              panAngle +
+                              rotationAngle +
+                              _math.pi / 1.978 +
+                              _calculateSliceAngle(i, items.length),
+                          offset: wheelData.offset,
+                        ),
+                    ];
+
+                    final borderItems = [
+                      for (var i = 0; i < items.length; i++)
+                        TransformedFortuneItem(
+                          item: items[i],
+                          angle: selectedAngle +
+                              panAngle +
+                              rotationAngle +
+                              _math.pi / 1.99 +
+                              _calculateSliceAngle(i, items.length),
+                          offset: wheelData.offset,
+                        ),
+                    ];
+
                     if (innerShadows?.isNotEmpty ?? false) {
                       return SizedBox.expand(
                         child: InnerShadow(
                           shadows: innerShadows!,
                           child: _CircleSlices(
                             items: transformedItems,
+                            borderItems: borderItems,
+                            decorationItems: decorationItems,
                             wheelData: wheelData,
                             styleStrategy: styleStrategy,
                           ),
@@ -283,6 +311,8 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
 
                     return SizedBox.expand(
                       child: _CircleSlices(
+                        decorationItems: decorationItems,
+                        borderItems: borderItems,
                         items: transformedItems,
                         wheelData: wheelData,
                         styleStrategy: styleStrategy,

@@ -17,8 +17,7 @@ class _TransformedCircleSlice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final style = item.style ??
-        styleStrategy.getItemStyle(theme, index, wheelData.itemCount);
+    final style = item.style ?? styleStrategy.getItemStyle(theme, index, wheelData.itemCount);
 
     return _CircleSliceLayout(
       handler: item,
@@ -40,6 +39,8 @@ class _TransformedCircleSlice extends StatelessWidget {
 
 class _CircleSlices extends StatelessWidget {
   final List<TransformedFortuneItem> items;
+  final List<TransformedFortuneItem> decorationItems;
+  final List<TransformedFortuneItem> borderItems;
   final StyleStrategy styleStrategy;
   final _WheelData wheelData;
 
@@ -48,6 +49,8 @@ class _CircleSlices extends StatelessWidget {
     required this.items,
     required this.styleStrategy,
     required this.wheelData,
+    required this.decorationItems,
+    required this.borderItems,
   }) : super(key: key);
 
   @override
@@ -68,9 +71,34 @@ class _CircleSlices extends StatelessWidget {
           ),
         ),
     ];
+    final slices2 = [
+      for (var i = 0; i < borderItems.length; i++)
+        Transform.translate(
+          offset: borderItems[i].offset,
+          child: Transform.rotate(
+            alignment: Alignment.topLeft,
+            angle: borderItems[i].angle,
+            child: SpinWheelSideItem(),
+          ),
+        ),
+    ];
+
+    final slices3 = [
+      for (var i = 0; i < decorationItems.length; i++)
+        Transform.translate(
+          offset: decorationItems[i].offset,
+          child: Transform.rotate(
+            alignment: Alignment.topLeft,
+            angle: decorationItems[i].angle,
+            child: SpinWheelSideItem(
+              isLine: false,
+            ),
+          ),
+        ),
+    ];
 
     return Stack(
-      children: slices,
+      children: [...slices, ...slices2, ...slices3],
     );
   }
 }
