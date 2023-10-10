@@ -153,6 +153,14 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
 
   final List<Shadow>? innerShadows;
 
+  final Widget? decorationWidget;
+
+  final double? customDecorationWidgetAngle;
+
+  final Widget? borderWidget;
+
+  final double? customBorderWidgetAngle;
+
   double _getAngle(double progress) {
     return 2 * _math.pi * rotationCount * progress;
   }
@@ -185,6 +193,10 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
     this.onFocusItemChanged,
     this.centerWidget,
     this.innerShadows,
+    this.borderWidget,
+    this.decorationWidget,
+    this.customBorderWidgetAngle,
+    this.customDecorationWidgetAngle,
   })  : physics = physics ?? CircularPanPhysics(),
         assert(items.length > 1),
         super(key: key);
@@ -268,40 +280,24 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                         ),
                     ];
 
-                    final decorationItems = [
-                      for (var i = 0; i < items.length; i++)
-                        TransformedFortuneItem(
-                          item: items[i],
-                          angle: selectedAngle +
-                              panAngle +
-                              rotationAngle +
-                              _math.pi / 1.978 +
-                              _calculateSliceAngle(i, items.length),
-                          offset: wheelData.offset,
-                        ),
-                    ];
-
-                    final borderItems = [
-                      for (var i = 0; i < items.length; i++)
-                        TransformedFortuneItem(
-                          item: items[i],
-                          angle: selectedAngle +
-                              panAngle +
-                              rotationAngle +
-                              _math.pi / 1.99 +
-                              _calculateSliceAngle(i, items.length),
-                          offset: wheelData.offset,
-                        ),
-                    ];
-
                     if (innerShadows?.isNotEmpty ?? false) {
                       return SizedBox.expand(
                         child: InnerShadow(
                           shadows: innerShadows!,
                           child: _CircleSlices(
+                            decorationWidget: decorationWidget,
+                            borderWidget: borderWidget,
                             items: transformedItems,
-                            borderItems: borderItems,
-                            decorationItems: decorationItems,
+                            borderItems: _extraItemsConfig(
+                              totalAngle: totalAngle,
+                              customRad: customBorderWidgetAngle ?? 1.99,
+                              wheelData: wheelData,
+                            ),
+                            decorationItems: _extraItemsConfig(
+                              totalAngle: totalAngle,
+                              customRad: customDecorationWidgetAngle ?? 1.978,
+                              wheelData: wheelData,
+                            ),
                             wheelData: wheelData,
                             styleStrategy: styleStrategy,
                           ),
@@ -311,8 +307,18 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
 
                     return SizedBox.expand(
                       child: _CircleSlices(
-                        decorationItems: decorationItems,
-                        borderItems: borderItems,
+                        decorationWidget: decorationWidget,
+                        borderWidget: borderWidget,
+                        borderItems: _extraItemsConfig(
+                          totalAngle: totalAngle,
+                          customRad: customBorderWidgetAngle ?? 1.99,
+                          wheelData: wheelData,
+                        ),
+                        decorationItems: _extraItemsConfig(
+                          totalAngle: totalAngle,
+                          customRad: customDecorationWidgetAngle ?? 1.97,
+                          wheelData: wheelData,
+                        ),
                         items: transformedItems,
                         wheelData: wheelData,
                         styleStrategy: styleStrategy,
@@ -330,6 +336,21 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
           ],
         );
       },
+    );
+  }
+
+  List<TransformedFortuneItem> _extraItemsConfig({
+    required double totalAngle,
+    required double customRad,
+    required _WheelData wheelData,
+  }) {
+    return List.generate(
+      items.length,
+      (index) => TransformedFortuneItem(
+        item: items[index],
+        angle: totalAngle + _math.pi / customRad + _calculateSliceAngle(index, items.length),
+        offset: wheelData.offset,
+      ),
     );
   }
 

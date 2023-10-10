@@ -43,6 +43,8 @@ class _CircleSlices extends StatelessWidget {
   final List<TransformedFortuneItem> borderItems;
   final StyleStrategy styleStrategy;
   final _WheelData wheelData;
+  final Widget? decorationWidget;
+  final Widget? borderWidget;
 
   const _CircleSlices({
     Key? key,
@@ -51,6 +53,8 @@ class _CircleSlices extends StatelessWidget {
     required this.wheelData,
     required this.decorationItems,
     required this.borderItems,
+    this.decorationWidget,
+    this.borderWidget,
   }) : super(key: key);
 
   @override
@@ -71,34 +75,41 @@ class _CircleSlices extends StatelessWidget {
           ),
         ),
     ];
-    final slices2 = [
-      for (var i = 0; i < borderItems.length; i++)
-        Transform.translate(
-          offset: borderItems[i].offset,
-          child: Transform.rotate(
-            alignment: Alignment.topLeft,
-            angle: borderItems[i].angle,
-            child: SpinWheelSideItem(),
-          ),
-        ),
-    ];
-
-    final slices3 = [
-      for (var i = 0; i < decorationItems.length; i++)
-        Transform.translate(
-          offset: decorationItems[i].offset,
-          child: Transform.rotate(
-            alignment: Alignment.topLeft,
-            angle: decorationItems[i].angle,
-            child: SpinWheelSideItem(
-              isLine: false,
-            ),
-          ),
-        ),
-    ];
 
     return Stack(
-      children: [...slices, ...slices2, ...slices3],
+      children: [
+        ...slices,
+        if (borderWidget != null) ..._borderItems(),
+        if (decorationWidget != null) ..._decorationItems(),
+      ],
+    );
+  }
+
+  List<Widget> _decorationItems() {
+    return List.generate(
+      decorationItems.length,
+      (index) => Transform.translate(
+        offset: decorationItems[index].offset,
+        child: Transform.rotate(
+          alignment: Alignment.topLeft,
+          angle: decorationItems[index].angle,
+          child: decorationWidget,
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _borderItems() {
+    return List.generate(
+      borderItems.length,
+      (index) => Transform.translate(
+        offset: borderItems[index].offset,
+        child: Transform.rotate(
+          alignment: Alignment.topLeft,
+          angle: borderItems[index].angle,
+          child: borderWidget,
+        ),
+      ),
     );
   }
 }
