@@ -28,7 +28,7 @@ class FortuneWheelPage extends HookWidget {
 
     void emitSelectedIndex() {
       selected.add(
-        roll(Constants.fortuneValues.length),
+        Fortune.randomInt(3, Constants.fortuneValues.length),
       );
     }
 
