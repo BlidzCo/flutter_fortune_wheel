@@ -161,6 +161,9 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
 
   final double? customBorderWidgetAngle;
 
+  /// If this is provided, it be init and dispose properly
+  final AnimationController? animationController;
+
   double _getAngle(double progress) {
     return 2 * _math.pi * rotationCount * progress;
   }
@@ -197,35 +200,21 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
     this.decorationWidget,
     this.customBorderWidgetAngle,
     this.customDecorationWidgetAngle,
+    this.animationController,
   })  : physics = physics ?? CircularPanPhysics(),
         assert(items.length > 1),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final rotateAnimCtrl = useAnimationController(duration: duration);
+    final rotateAnimCtrl = animationController ?? useAnimationController(duration: duration);
     final rotateAnim = CurvedAnimation(parent: rotateAnimCtrl, curve: curve);
-    Future<void> animate() async {
-      if (rotateAnimCtrl.isAnimating) {
-        return;
-      }
-
-      await Future.microtask(() => onAnimationStart?.call());
-      await rotateAnimCtrl.forward(from: 0);
-      await Future.microtask(() => onAnimationEnd?.call());
-    }
-
-    useEffect(() {
-      if (animateFirst) animate();
-      return null;
-    }, []);
 
     final selectedIndex = useState<int>(0);
 
     useEffect(() {
       final subscription = selected.listen((event) {
         selectedIndex.value = event;
-        animate();
       });
       return subscription.cancel;
     }, []);
