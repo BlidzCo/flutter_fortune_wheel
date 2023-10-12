@@ -12,6 +12,12 @@ class FortuneItem implements GestureHandler {
   /// A widget to be rendered within this item.
   final Widget child;
 
+  /// A widget to be rendered within this item.
+  final Widget? borderWidget;
+
+  /// A widget to be rendered within this item.
+  final Widget? decorationWidget;
+
   @override
   final GestureTapCallback? onDoubleTap;
 
@@ -199,14 +205,20 @@ class FortuneItem implements GestureHandler {
     this.onVerticalDragEnd,
     this.onVerticalDragStart,
     this.onVerticalDragUpdate,
+    this.borderWidget,
+    this.decorationWidget,
   });
 
   @override
-  int get hashCode => hash2(child, style);
+  int get hashCode => hash4(child, style, borderWidget, decorationWidget);
 
   @override
   bool operator ==(Object other) {
-    return other is FortuneItem && style == other.style && child == other.child;
+    return other is FortuneItem &&
+        style == other.style &&
+        child == other.child &&
+        borderWidget == other.borderWidget &&
+        decorationWidget == other.decorationWidget;
   }
 }
 
@@ -223,6 +235,12 @@ class TransformedFortuneItem implements FortuneItem {
   }) : _item = item;
 
   Widget get child => _item.child;
+
+  @override
+  Widget? get borderWidget => _item.borderWidget;
+
+  @override
+  Widget? get decorationWidget => _item.decorationWidget;
 
   FortuneItemStyle? get style => _item.style;
 
@@ -242,12 +260,10 @@ class TransformedFortuneItem implements FortuneItem {
   GestureForcePressPeakCallback? get onForcePressPeak => _item.onForcePressPeak;
 
   @override
-  GestureForcePressStartCallback? get onForcePressStart =>
-      _item.onForcePressStart;
+  GestureForcePressStartCallback? get onForcePressStart => _item.onForcePressStart;
 
   @override
-  GestureForcePressUpdateCallback? get onForcePressUpdate =>
-      _item.onForcePressUpdate;
+  GestureForcePressUpdateCallback? get onForcePressUpdate => _item.onForcePressUpdate;
 
   @override
   GestureLongPressCallback? get onLongPress => _item.onLongPress;
@@ -256,8 +272,7 @@ class TransformedFortuneItem implements FortuneItem {
   GestureLongPressEndCallback? get onLongPressEnd => _item.onLongPressEnd;
 
   @override
-  GestureLongPressMoveUpdateCallback? get onLongPressMoveUpdate =>
-      _item.onLongPressMoveUpdate;
+  GestureLongPressMoveUpdateCallback? get onLongPressMoveUpdate => _item.onLongPressMoveUpdate;
 
   @override
   GestureLongPressStartCallback? get onLongPressStart => _item.onLongPressStart;
@@ -290,15 +305,13 @@ class TransformedFortuneItem implements FortuneItem {
   GestureScaleUpdateCallback? get onScaleUpdate => _item.onScaleUpdate;
 
   @override
-  GestureLongPressCallback? get onSecondaryLongPress =>
-      _item.onSecondaryLongPress;
+  GestureLongPressCallback? get onSecondaryLongPress => _item.onSecondaryLongPress;
 
   @override
   GestureTapCallback? get onSecondaryTap => _item.onSecondaryTap;
 
   @override
-  GestureTapCancelCallback? get onSecondaryTapCancel =>
-      _item.onSecondaryTapCancel;
+  GestureTapCancelCallback? get onSecondaryTapCancel => _item.onSecondaryTapCancel;
 
   @override
   GestureTapDownCallback? get onSecondaryTapDown => _item.onSecondaryTapDown;
@@ -319,8 +332,7 @@ class TransformedFortuneItem implements FortuneItem {
   GestureTapUpCallback? get onTapUp => _item.onTapUp;
 
   @override
-  GestureTapCancelCallback? get onTertiaryTapCancel =>
-      _item.onTertiaryTapCancel;
+  GestureTapCancelCallback? get onTertiaryTapCancel => _item.onTertiaryTapCancel;
 
   @override
   GestureTapDownCallback? get onTertiaryTapDown => _item.onTertiaryTapDown;
@@ -329,43 +341,34 @@ class TransformedFortuneItem implements FortuneItem {
   GestureTapUpCallback? get onTertiaryTapUp => _item.onTertiaryTapUp;
 
   @override
-  GestureDragCancelCallback? get onHorizontalDragCancel =>
-      _item.onHorizontalDragCancel;
+  GestureDragCancelCallback? get onHorizontalDragCancel => _item.onHorizontalDragCancel;
 
   @override
-  GestureDragDownCallback? get onHorizontalDragDown =>
-      _item.onHorizontalDragDown;
+  GestureDragDownCallback? get onHorizontalDragDown => _item.onHorizontalDragDown;
 
   @override
   GestureDragEndCallback? get onHorizontalDragEnd => _item.onHorizontalDragEnd;
 
   @override
-  GestureDragStartCallback? get onHorizontalDragStart =>
-      _item.onHorizontalDragStart;
+  GestureDragStartCallback? get onHorizontalDragStart => _item.onHorizontalDragStart;
 
   @override
-  GestureDragUpdateCallback? get onHorizontalDragUpdate =>
-      _item.onHorizontalDragUpdate;
+  GestureDragUpdateCallback? get onHorizontalDragUpdate => _item.onHorizontalDragUpdate;
 
   @override
-  GestureLongPressEndCallback? get onSecondaryLongPressEnd =>
-      _item.onSecondaryLongPressEnd;
+  GestureLongPressEndCallback? get onSecondaryLongPressEnd => _item.onSecondaryLongPressEnd;
 
   @override
-  GestureLongPressMoveUpdateCallback? get onSecondaryLongPressMoveUpdate =>
-      _item.onSecondaryLongPressMoveUpdate;
+  GestureLongPressMoveUpdateCallback? get onSecondaryLongPressMoveUpdate => _item.onSecondaryLongPressMoveUpdate;
 
   @override
-  GestureLongPressStartCallback? get onSecondaryLongPressStart =>
-      _item.onSecondaryLongPressStart;
+  GestureLongPressStartCallback? get onSecondaryLongPressStart => _item.onSecondaryLongPressStart;
 
   @override
-  GestureLongPressUpCallback? get onSecondaryLongPressUp =>
-      _item.onSecondaryLongPressUp;
+  GestureLongPressUpCallback? get onSecondaryLongPressUp => _item.onSecondaryLongPressUp;
 
   @override
-  GestureDragCancelCallback? get onVerticalDragCancel =>
-      _item.onVerticalDragCancel;
+  GestureDragCancelCallback? get onVerticalDragCancel => _item.onVerticalDragCancel;
 
   @override
   GestureDragDownCallback? get onVerticalDragDown => _item.onVerticalDragDown;
@@ -374,10 +377,8 @@ class TransformedFortuneItem implements FortuneItem {
   GestureDragEndCallback? get onVerticalDragEnd => _item.onVerticalDragEnd;
 
   @override
-  GestureDragStartCallback? get onVerticalDragStart =>
-      _item.onVerticalDragStart;
+  GestureDragStartCallback? get onVerticalDragStart => _item.onVerticalDragStart;
 
   @override
-  GestureDragUpdateCallback? get onVerticalDragUpdate =>
-      _item.onVerticalDragUpdate;
+  GestureDragUpdateCallback? get onVerticalDragUpdate => _item.onVerticalDragUpdate;
 }

@@ -32,6 +32,7 @@ class _TransformedCircleSlice extends StatelessWidget {
         fillColor: style.color,
         strokeColor: style.borderColor,
         strokeWidth: style.borderWidth,
+        gradient: style.gradient,
       ),
     );
   }
@@ -43,8 +44,6 @@ class _CircleSlices extends StatelessWidget {
   final List<TransformedFortuneItem> borderItems;
   final StyleStrategy styleStrategy;
   final _WheelData wheelData;
-  final Widget? decorationWidget;
-  final Widget? borderWidget;
 
   const _CircleSlices({
     Key? key,
@@ -53,8 +52,6 @@ class _CircleSlices extends StatelessWidget {
     required this.wheelData,
     required this.decorationItems,
     required this.borderItems,
-    this.decorationWidget,
-    this.borderWidget,
   }) : super(key: key);
 
   @override
@@ -79,8 +76,8 @@ class _CircleSlices extends StatelessWidget {
     return Stack(
       children: [
         ...slices,
-        if (borderWidget != null) ..._borderItems(),
-        if (decorationWidget != null) ..._decorationItems(),
+        ..._borderItems(),
+        ..._decorationItems(),
       ],
     );
   }
@@ -93,7 +90,7 @@ class _CircleSlices extends StatelessWidget {
         child: Transform.rotate(
           alignment: Alignment.topLeft,
           angle: decorationItems[index].angle,
-          child: decorationWidget,
+          child: decorationItems[index].decorationWidget,
         ),
       ),
     );
@@ -107,7 +104,7 @@ class _CircleSlices extends StatelessWidget {
         child: Transform.rotate(
           alignment: Alignment.topLeft,
           angle: borderItems[index].angle,
-          child: borderWidget,
+          child: borderItems[index].borderWidget,
         ),
       ),
     );

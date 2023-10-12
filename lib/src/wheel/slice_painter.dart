@@ -7,10 +7,12 @@ class _CircleSlicePainter extends CustomPainter {
   final Color? strokeColor;
   final double strokeWidth;
   final double angle;
+  final Gradient? gradient;
 
   const _CircleSlicePainter({
     required this.fillColor,
     this.strokeColor,
+    this.gradient,
     this.strokeWidth = 1,
     this.angle = _math.pi / 2,
   }) : assert(angle > 0 && angle < 2 * _math.pi);
@@ -20,13 +22,26 @@ class _CircleSlicePainter extends CustomPainter {
     final radius = _math.min(size.width, size.height);
     final path = _CircleSlice.buildSlicePath(radius, angle);
 
-    // fill slice area
-    canvas.drawPath(
-      path,
-      Paint()
-        ..color = fillColor
-        ..style = PaintingStyle.fill,
-    );
+    if (gradient != null) {
+      canvas.drawPath(
+        path,
+        Paint()
+          ..shader = gradient!.createShader(Rect.fromCircle(
+            center: Offset(0, 0),
+            radius: radius,
+          ))
+          ..style = PaintingStyle.fill,
+      );
+    } else {
+      // fill slice area
+      canvas.drawPath(
+        path,
+        Paint()
+          ..shader
+          ..color = fillColor
+          ..style = PaintingStyle.fill,
+      );
+    }
 
     // draw slice border
     if (strokeWidth > 0) {

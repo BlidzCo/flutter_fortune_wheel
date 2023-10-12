@@ -21,6 +21,7 @@ class _CircleSlice extends StatelessWidget {
   final Color fillColor;
   final Color strokeColor;
   final double strokeWidth;
+  final Gradient? gradient;
 
   const _CircleSlice({
     Key? key,
@@ -29,6 +30,7 @@ class _CircleSlice extends StatelessWidget {
     required this.strokeColor,
     this.strokeWidth = 1,
     required this.angle,
+    this.gradient,
   })  : assert(radius > 0),
         super(key: key);
 
@@ -43,6 +45,7 @@ class _CircleSlice extends StatelessWidget {
           fillColor: fillColor,
           strokeColor: strokeColor,
           strokeWidth: strokeWidth,
+          gradient: gradient,
         ),
       ),
     );

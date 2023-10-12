@@ -153,11 +153,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
 
   final List<Shadow>? innerShadows;
 
-  final Widget? decorationWidget;
-
   final double? customDecorationWidgetAngle;
-
-  final Widget? borderWidget;
 
   final double? customBorderWidgetAngle;
 
@@ -196,8 +192,6 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
     this.onFocusItemChanged,
     this.centerWidget,
     this.innerShadows,
-    this.borderWidget,
-    this.decorationWidget,
     this.customBorderWidgetAngle,
     this.customDecorationWidgetAngle,
     this.animationController,
@@ -274,8 +268,6 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                         child: InnerShadow(
                           shadows: innerShadows!,
                           child: _CircleSlices(
-                            decorationWidget: decorationWidget,
-                            borderWidget: borderWidget,
                             items: transformedItems,
                             borderItems: _extraItemsConfig(
                               totalAngle: totalAngle,
@@ -296,8 +288,6 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
 
                     return SizedBox.expand(
                       child: _CircleSlices(
-                        decorationWidget: decorationWidget,
-                        borderWidget: borderWidget,
                         borderItems: _extraItemsConfig(
                           totalAngle: totalAngle,
                           customRad: customBorderWidgetAngle ?? 1.99,

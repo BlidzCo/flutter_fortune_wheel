@@ -9,6 +9,9 @@ class FortuneItemStyle {
   /// The color used for filling the background of a [FortuneItem].
   final Color color;
 
+  /// The color used for filling the background of a [FortuneItem].
+  final Gradient? gradient;
+
   /// The color used for painting the border of a [FortuneItem].
   final Color borderColor;
 
@@ -25,6 +28,7 @@ class FortuneItemStyle {
     this.color = Colors.white,
     this.borderColor = Colors.black,
     this.borderWidth = 1.0,
+    this.gradient,
     this.textAlign = TextAlign.start,
     this.textStyle = const TextStyle(),
   });
@@ -103,9 +107,7 @@ mixin DisableAwareStyleStrategy {
 ///
 /// The [ThemeData.primaryColor] is used as the border color and the background
 /// is drawn using the same color at 0.3 opacity.
-class UniformStyleStrategy
-    with DisableAwareStyleStrategy
-    implements StyleStrategy {
+class UniformStyleStrategy with DisableAwareStyleStrategy implements StyleStrategy {
   final Color? color;
   final Color? borderColor;
   final double? borderWidth;
@@ -150,9 +152,7 @@ class UniformStyleStrategy
 /// It renders even items at 0.5 opacity and odd items using the original color.
 /// If the item count is odd, the first item is rendered with 0.7 opacity to
 /// prevent a non-uniform style.
-class AlternatingStyleStrategy
-    with DisableAwareStyleStrategy
-    implements StyleStrategy {
+class AlternatingStyleStrategy with DisableAwareStyleStrategy implements StyleStrategy {
   final List<int> disabledIndices;
 
   Color _getFillColor(ThemeData theme, int index, int itemCount) {
