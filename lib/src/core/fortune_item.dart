@@ -18,6 +18,10 @@ class FortuneItem implements GestureHandler {
   /// A widget to be rendered within this item.
   final Widget? decorationWidget;
 
+  final double? customDecorationWidgetAngle;
+
+  final double? customBorderWidgetAngle;
+
   @override
   final GestureTapCallback? onDoubleTap;
 
@@ -207,6 +211,8 @@ class FortuneItem implements GestureHandler {
     this.onVerticalDragUpdate,
     this.borderWidget,
     this.decorationWidget,
+    this.customDecorationWidgetAngle,
+    this.customBorderWidgetAngle,
   });
 
   @override
@@ -218,7 +224,9 @@ class FortuneItem implements GestureHandler {
         style == other.style &&
         child == other.child &&
         borderWidget == other.borderWidget &&
-        decorationWidget == other.decorationWidget;
+        decorationWidget == other.decorationWidget &&
+        customBorderWidgetAngle == customBorderWidgetAngle &&
+        customBorderWidgetAngle == customBorderWidgetAngle;
   }
 }
 
@@ -243,6 +251,11 @@ class TransformedFortuneItem implements FortuneItem {
   Widget? get decorationWidget => _item.decorationWidget;
 
   FortuneItemStyle? get style => _item.style;
+
+  @override
+  double? get customDecorationWidgetAngle => _item.customDecorationWidgetAngle;
+  @override
+  double? get customBorderWidgetAngle => _item.customBorderWidgetAngle;
 
   @override
   GestureTapCallback? get onDoubleTap => _item.onDoubleTap;
