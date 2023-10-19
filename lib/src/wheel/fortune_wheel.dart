@@ -320,7 +320,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
     return List.generate(
       items.length,
       (index) {
-        final decWidgetCustomRad = items[index].customDecorationWidgetAngle ?? 1.978;
+        final decWidgetCustomRad = items[index].customDecorationWidgetAngle ?? 1.97;
         final borderWidgetCustomRad = items[index].customBorderWidgetAngle ?? 1.99;
 
         return TransformedFortuneItem(
